@@ -428,8 +428,12 @@ def fbinarizar():
     pedirValor("Binarización",2,0,255)
 
 def letraspr():
-    img = cv.morphologyEx(cv.imread("p_completa.png"), cv.MORPH_HITMISS,cv.imread("p.png"))
-    cv.imshow(img)
+    #cv.imshow('Imagen',cv.cvtColor(cv.imread("p_completa.png"), cv.COLOR_BGR2GRAY))
+    img1 = cv.cvtColor(cv.imread("r_completa.png"), cv.COLOR_BGR2GRAY)
+    img2 = cv.cvtColor(cv.imread("p.png"), cv.COLOR_BGR2GRAY)
+    img = cv.morphologyEx(img1, cv.MORPH_HITMISS, img2)
+    #cv.imshow('Imagen',img)
+    agregar_img(img)
 
 def metotsu():
     #Si no hay imagenes seleccionadas muestra advertencia

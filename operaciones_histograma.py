@@ -13,7 +13,7 @@ def h_original(im):
         im2=cv.cvtColor(im, cv.COLOR_BGR2GRAY)
     else:
         #En caso de que la imagen original es de un canal se crea una copia
-        im2 = copy.copy(im)
+        im2=copy.copy(im)
     
     hist=cv.calcHist([im2], [0], None, [256], [0, 256])
     plt.plot(hist, color='gray' )

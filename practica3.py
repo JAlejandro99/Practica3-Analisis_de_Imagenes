@@ -1,5 +1,6 @@
 import cv2
 import copy
+import numpy as np
 
 def sep_canales(img_rgb):
     #Imagen en canal rojo
@@ -23,7 +24,7 @@ def sep_canales(img_rgb):
     return r,g,b
 
 def tarea_dos():
-    img=cv2.imread('manzana.jpg')
+    img=cv2.imread('Imagen-letreros.jpg')
     img_gris=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)#Imagen en escala de grises en BGR
     img_rgb= cv2.cvtColor(img_gris, cv2.COLOR_GRAY2RGB)#Convierte imagen en grises en RGB
     
@@ -47,19 +48,16 @@ def tarea_dos():
     
     cv2.waitKey(0)
     
-    #Binariza la imagen del canal más conveniente con el método de umbralización seleccionado
-    adaptativa(g)
-    otsu(g)
+    #Binariza la imagen del canal más conveniente con el método de Otsu
+    img_bin=otsu(g)
     
     #Transformada hit or miss
-    grises=cv2.cvtColor(g, cv2.COLOR_BGR2GRAY)#Si se pasa la imagen binarizada, no funciona
-    
     kernel = np.array((
         [1, 1, 1],
-        [0, 1, -1],
-        [0, 1, -1]), dtype="int")
+        [1, 1, 1],
+        [1, 1, 1]), dtype="int")
     
-    trans_img=cv2.morphologyEx(grises, cv2.MORPH_HITMISS, kernel)
+    trans_img=cv2.morphologyEx(img_bin, cv2.MORPH_HITMISS, kernel)
     cv2.imshow('Transformada',trans_img)
     cv2.waitKey(0)
 
@@ -80,5 +78,6 @@ def adaptativa(img):
 def otsu(img):
     img=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)#Imagen en escala de grises
     ret2,th2=cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-    cv2.imshow('Metodo Otsu',th2)
-    cv2.waitKey(0)
+    return th2
+    #cv2.imshow('Metodo Otsu',th2)
+    #cv2.waitKey(0)

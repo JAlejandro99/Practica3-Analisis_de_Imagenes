@@ -50,6 +50,18 @@ def tarea_dos():
     #Binariza la imagen del canal más conveniente con el método de umbralización seleccionado
     adaptativa(g)
     otsu(g)
+    
+    #Transformada hit or miss
+    grises=cv2.cvtColor(g, cv2.COLOR_BGR2GRAY)#Si se pasa la imagen binarizada, no funciona
+    
+    kernel = np.array((
+        [1, 1, 1],
+        [0, 1, -1],
+        [0, 1, -1]), dtype="int")
+    
+    trans_img=cv2.morphologyEx(grises, cv2.MORPH_HITMISS, kernel)
+    cv2.imshow('Transformada',trans_img)
+    cv2.waitKey(0)
 
 #Umbralización adaptativa
 def adaptativa(img):

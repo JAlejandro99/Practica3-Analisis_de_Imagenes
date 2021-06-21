@@ -73,6 +73,8 @@ def adaptativa(img):
     cv2.imshow('Adaptativa MEAN',th2)
     cv2.imshow('Adaptativa GAUSSIAN',th3)
     cv2.waitKey(0)
+
+    return th2,th3
     
 #Método Otsu
 def otsu(img):

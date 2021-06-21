@@ -451,7 +451,8 @@ def umbadapt():
                              title="Imagen no seleccionada")
         return
     img = adaptativa(im[img_sel])
-    agregar_img(img)
+    agregar_img(img[0])
+    agregar_img(img[1])
 
 def canales():
     #Si no hay imagenes seleccionadas muestra advertencia

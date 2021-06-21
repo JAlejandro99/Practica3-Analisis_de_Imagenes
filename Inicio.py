@@ -6,6 +6,7 @@ from numpy import *
 from operaciones_histograma import *
 from filtros import *
 import cv2 as cv
+from practica3 import *
 
 def drag_start(event):
     global img_sel,seleccion_anterior
@@ -59,6 +60,16 @@ def button_hover(e):
         status_label.config(text="Filtro Mínimo")
     elif widget==b16:
         status_label.config(text="Binarizar")
+    elif widget==b17:
+        status_label.config(text="Multiumbralización")
+    elif widget==b18:
+        status_label.config(text="Hallar letras p y r")
+    elif widget==b19:
+        status_label.config(text="Método de Otsu")
+    elif widget==b20:
+        status_label.config(text="Umbralización Adaptativa")
+    elif widget==b21:
+        status_label.config(text="Separar canales")
 
 def button_hover_leave(e):
     status_label.config(text="")
@@ -416,6 +427,39 @@ def fbinarizar():
         return
     pedirValor("Binarización",2,0,255)
 
+def letraspr():
+    img = cv.morphologyEx(cv.imread("p_completa.png"), cv.MORPH_HITMISS,cv.imread("p.png"))
+    cv.imshow(img)
+
+def metotsu():
+    #Si no hay imagenes seleccionadas muestra advertencia
+    if(len(im)==0):
+        messagebox.showwarning(message="Debes seleccionar una imagen", 
+                             title="Imagen no seleccionada")
+        return
+    img = otsu(im[img_sel])
+    agregar_img(img)
+
+def umbadapt():
+    #Si no hay imagenes seleccionadas muestra advertencia
+    if(len(im)==0):
+        messagebox.showwarning(message="Debes seleccionar una imagen", 
+                             title="Imagen no seleccionada")
+        return
+    img = adaptativa(im[img_sel])
+    agregar_img(img)
+
+def canales():
+    #Si no hay imagenes seleccionadas muestra advertencia
+    if(len(im)==0):
+        messagebox.showwarning(message="Debes seleccionar una imagen", 
+                             title="Imagen no seleccionada")
+        return
+    img = sep_canales(im[img_sel])
+    agregar_img(img[0])
+    agregar_img(img[1])
+    agregar_img(img[2])
+
 def eliminar_img():
     global imagenes,imagenesLabel,im,nomb_imagenes,seleccion_anterior,img_sel,frame
     imagenesLabel[img_sel].config(bd=0)
@@ -477,7 +521,7 @@ nomb_imagenes = list()
 seleccion_anterior = -1
 img_sel = -1
 
-Grid.rowconfigure(root,3,weight=1)
+Grid.rowconfigure(root,4,weight=1)
 Grid.columnconfigure(root,0,weight=1)
 Grid.columnconfigure(root,1,weight=1)
 Grid.columnconfigure(root,2,weight=1)
@@ -557,59 +601,94 @@ b9.grid(row=2,column=0)
 b9.bind("<Enter>",button_hover)
 b9.bind("<Leave>",button_hover_leave)
 
-#Ver histograma RGB
+#Filtro Gaussiano
 img10 = leer_imagen("iconos/filtro_gaussiano.png")
 b10=Button(root,image=img10,width=80,command=lambda:filtroGaussiano())
 b10.grid(row=2,column=1)
 b10.bind("<Enter>",button_hover)
 b10.bind("<Leave>",button_hover_leave)
 
-#Desplazamiento del histograma a la izquierda
+#Filtro de Roberts
 img11 = leer_imagen("iconos/roberts.png")
 b11=Button(root,image=img11,width=80,command=lambda:filtroRoberts())
 b11.grid(row=2,column=2)
 b11.bind("<Enter>",button_hover)
 b11.bind("<Leave>",button_hover_leave)
 
-#Desplazamiento del histograma a la derecha
+#Filtro de Prewitt
 img12 = leer_imagen("iconos/prewitt.png")
 b12=Button(root,image=img12,width=80,command=lambda:filtroPrewitt())
 b12.grid(row=2,column=3)
 b12.bind("<Enter>",button_hover)
 b12.bind("<Leave>",button_hover_leave)
 
-#Estiramiento del histograma
+#Filtro de Sobel
 img13 = leer_imagen("iconos/sobel.png")
 b13=Button(root,image=img13,width=80,command=lambda:filtroSobel())
 b13.grid(row=2,column=4)
 b13.bind("<Enter>",button_hover)
 b13.bind("<Leave>",button_hover_leave)
 
-#Histograma de la imagen ecualizada
+#Filtro máximo
 img14 = leer_imagen("iconos/maximo.png")
 b14=Button(root,image=img14,width=80,command=lambda:filtroMaximo())
 b14.grid(row=2,column=5)
 b14.bind("<Enter>",button_hover)
 b14.bind("<Leave>",button_hover_leave)
 
-#Estrechamiento del histograma
+#Filtro mínimo
 img15 = leer_imagen("iconos/minimo.png")
 b15=Button(root,image=img15,width=80,command=lambda:filtroMinimo())
 b15.grid(row=2,column=6)
 b15.bind("<Enter>",button_hover)
 b15.bind("<Leave>",button_hover_leave)
 
-#Estrechamiento del histograma
+#Binarizacion
 img16 = leer_imagen("iconos/binarizar.png")
 b16=Button(root,image=img16,width=80,command=lambda:fbinarizar())
 b16.grid(row=2,column=7)
 b16.bind("<Enter>",button_hover)
 b16.bind("<Leave>",button_hover_leave)
 
+#Multiumbralización
+img17 = leer_imagen("iconos/multiumbralizacion.png")
+b17=Button(root,image=img17,width=80,command=lambda:filtroMinimo())
+b17.grid(row=3,column=0)
+b17.bind("<Enter>",button_hover)
+b17.bind("<Leave>",button_hover_leave)
+
+#Hallar letras p y r
+img18 = leer_imagen("iconos/binarizar.png")
+b18=Button(root,image=img18,width=80,command=lambda:letraspr())
+b18.grid(row=3,column=1)
+b18.bind("<Enter>",button_hover)
+b18.bind("<Leave>",button_hover_leave)
+
+#Método de Otsu
+img19 = leer_imagen("iconos/otsu.png")
+b19=Button(root,image=img19,width=80,command=lambda:metotsu())
+b19.grid(row=3,column=2)
+b19.bind("<Enter>",button_hover)
+b19.bind("<Leave>",button_hover_leave)
+
+#Umbralización Adaptativa
+img20 = leer_imagen("iconos/umbralAdapt.png")
+b20=Button(root,image=img20,width=80,command=lambda:umbadapt())
+b20.grid(row=3,column=3)
+b20.bind("<Enter>",button_hover)
+b20.bind("<Leave>",button_hover_leave)
+
+#Separar canales
+img21 = leer_imagen("iconos/rgb.png")
+b21=Button(root,image=img21,width=80,command=lambda:canales())
+b21.grid(row=3,column=4)
+b21.bind("<Enter>",button_hover)
+b21.bind("<Leave>",button_hover_leave)
+
 frame=Frame(root,height=h,width=w,bg="gray")
-frame.grid(row=3,column=0,columnspan=8,sticky="nsew")
+frame.grid(row=4,column=0,columnspan=8,sticky="nsew")
 
 status_label = Label(root,text='',bd=1,relief=SUNKEN,anchor=E,font=(18),pady=10)
-status_label.grid(row=4,column=0,columnspan=8,sticky="nsew")
+status_label.grid(row=5,column=0,columnspan=8,sticky="nsew")
 
 root.mainloop()

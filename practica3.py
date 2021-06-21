@@ -1,6 +1,27 @@
 import cv2
 import copy
 
+def sep_canales(img_rgb):
+    #Imagen en canal rojo
+    r=copy.copy(img_rgb)
+    r[:, :, 0] = 0
+    r[:, :, 1] = 0
+    cv2.imshow('R-RGB', r)
+    
+    #Imagen en canal verde
+    g=copy.copy(img_rgb)
+    g[:, :, 0] = 0
+    g[:, :, 2] = 0
+    cv2.imshow('G-RGB', g)
+    
+    #Imagen en canal azul
+    b=copy.copy(img_rgb)
+    b[:, :, 1] = 0
+    b[:, :, 2] = 0
+    cv2.imshow('B-RGB', b)
+    
+    return r,g,b
+
 def tarea_dos():
     img=cv2.imread('manzana.jpg')
     img_gris=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)#Imagen en escala de grises en BGR

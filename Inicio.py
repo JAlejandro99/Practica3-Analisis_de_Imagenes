@@ -429,11 +429,23 @@ def fbinarizar():
 
 def letraspr():
     #cv.imshow('Imagen',cv.cvtColor(cv.imread("p_completa.png"), cv.COLOR_BGR2GRAY))
-    img1 = cv.cvtColor(cv.imread("r_completa.png"), cv.COLOR_BGR2GRAY)
-    img2 = cv.cvtColor(cv.imread("p.png"), cv.COLOR_BGR2GRAY)
-    img = cv.morphologyEx(img1, cv.MORPH_HITMISS, img2)
+    img1 = cv.cvtColor(cv.imread("p_completa.png"), cv.COLOR_BGR2GRAY)
+    img2 = cv.cvtColor(cv.imread("p2.png"), cv.COLOR_BGR2GRAY)
+    for i in range(len(img2)):
+        for j in range(len(img2[0])):
+            if img2[i,j]==255:
+                img2[i,j] = 1
+    img1 = np.array(img1, dtype="uint8")
+    img2 = np.array(img2, dtype="int")
+    img = cv.morphologyEx(img1, cv.MORPH_HITMISS, img2)#cv.cvtColor(cv.morphologyEx(img1, cv.MORPH_HITMISS, img2),cv.COLOR_BGR2RGB)
     #cv.imshow('Imagen',img)
     agregar_img(img)
+    print(len(img))
+    print(len(img[0]))
+    #for i in range(len(img)):
+     #   for j in range(len(img[0])):
+      #      if img[i,j]==255:
+       #         print(img[i,j])
 
 def metotsu():
     #Si no hay imagenes seleccionadas muestra advertencia
@@ -443,6 +455,7 @@ def metotsu():
         return
     img = otsu(im[img_sel])
     agregar_img(img)
+
 
 def umbadapt():
     #Si no hay imagenes seleccionadas muestra advertencia

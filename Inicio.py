@@ -529,31 +529,66 @@ def letraspr():
     img1 = cv.cvtColor(cv.imread("p_completa.png"), cv.COLOR_BGR2GRAY)
     img2 = cv.cvtColor(cv.imread("p2.png"), cv.COLOR_BGR2GRAY)
     img3 = cv.cvtColor(cv.imread("r2.png"), cv.COLOR_BGR2GRAY)
-    for i in range(len(img2)):
-        for j in range(len(img2[0])):
-            if img2[i,j]==255:
-                img2[i,j] = 1
-    for i in range(len(img3)):
-        for j in range(len(img3[0])):
-            if img3[i,j]==255:
-                img3[i,j] = 1
     img1 = np.array(img1, dtype="uint8")
     img2 = np.array(img2, dtype="int")
     img3 = np.array(img3, dtype="int")
+
+    img2 = asignarobjyfon(img2)
+    img3 = asignarobjyfon(img3)
 
     img = cv.morphologyEx(img1, cv.MORPH_HITMISS, img2)
     img2 = np.zeros((len(img2),len(img2[0])))
     img2[int(len(img2)/2),int(len(img2[0])/2)] = 255
     ret = copy.copy(img_aux)
+    #ret = copy.copy(marcarhallazgos(img,img2,ret))
     marcarhallazgos(img,img2,ret)
 
     img = cv.morphologyEx(img1, cv.MORPH_HITMISS, img3)
     img3 = np.zeros((len(img3),len(img3[0])))
     img3[int(len(img3)/2),int(len(img3[0])/2)] = 255
-    agregar_img(img)
+    #ret = copy.copy(marcarhallazgos(img,img3,ret))
+    marcarhallazgos(img,img3,ret)
+
+    img2 = cv.cvtColor(cv.imread("p2.png"), cv.COLOR_BGR2GRAY)
+    img3 = cv.cvtColor(cv.imread("r2.png"), cv.COLOR_BGR2GRAY)
+    img2 = np.array(img2, dtype="int")
+    img3 = np.array(img3, dtype="int")
+    img2 = asignarobjyfon(img2)
+    img3 = asignarobjyfon(img3)
+    img2 = invertirobjyfon(img2)
+    img3 = invertirobjyfon(img3)
+
+    img = cv.morphologyEx(img1, cv.MORPH_HITMISS, img2)
+    img2 = np.zeros((len(img2),len(img2[0])))
+    img2[int(len(img2)/2),int(len(img2[0])/2)] = 255
+    #ret = copy.copy(marcarhallazgos(img,img2,ret))
+    marcarhallazgos(img,img2,ret)
+
+    img = cv.morphologyEx(img1, cv.MORPH_HITMISS, img3)
+    img3 = np.zeros((len(img3),len(img3[0])))
+    img3[int(len(img3)/2),int(len(img3[0])/2)] = 255
+    #ret = copy.copy(marcarhallazgos(img,img3,ret))
     marcarhallazgos(img,img3,ret)
 
     agregar_img(ret)
+
+def asignarobjyfon(img):
+    for i in range(len(img)):
+        for j in range(len(img[0])):
+            if img[i,j]==255:
+                img[i,j] = 1
+            else:
+                img[i,j] = -1
+    return img
+
+def invertirobjyfon(img):
+    for i in range(len(img)):
+        for j in range(len(img[0])):
+            if img[i,j]==1:
+                img[i,j] = -1
+            else:
+                img[i,j] = 1
+    return img
 
 def marcarhallazgos(img,img2,ret):
     for i in range(len(img)-len(img2)+1):
@@ -563,7 +598,7 @@ def marcarhallazgos(img,img2,ret):
                 ret[i+len(img2),j:j+len(img2[0])] = [0,255,255]
                 ret[i+1:i+len(img2),j+len(img2[0])] = [0,255,255]
                 ret[i+1:i+len(img2),j] = [0,255,255]
-    return ret
+    #return ret
 
 def metotsu():
     #Si no hay imagenes seleccionadas muestra advertencia

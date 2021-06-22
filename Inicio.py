@@ -470,6 +470,10 @@ def Multiumb():
         agregar_img(imag)
         cv.imshow('Imagen', imag)
         cv.waitKey()
+    #Cierra ventana de multiumbralizacion
+    newWindow.destroy()
+    #Vacía la lista con umbrales
+    valores_umbral.clear()
 
 #Interfaz para ingresar umbrales de binarización para multiumbralizacion
 def mumbral_interfaz():

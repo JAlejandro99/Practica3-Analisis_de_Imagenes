@@ -757,7 +757,7 @@ b17.bind("<Enter>",button_hover)
 b17.bind("<Leave>",button_hover_leave)
 
 #Hallar letras p y r
-img18 = leer_imagen("iconos/binarizar.png")
+img18 = leer_imagen("iconos/hitmiss.png")
 b18=Button(root,image=img18,width=80,command=lambda:letraspr())
 b18.grid(row=3,column=1)
 b18.bind("<Enter>",button_hover)

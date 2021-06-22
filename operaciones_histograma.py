@@ -20,6 +20,7 @@ def h_original(im):
     plt.title("Histograma Original")
     plt.xlabel('Intensidad de iluminacion')
     plt.ylabel('Cantidad de pixeles')
+    plt.savefig("histograma.png")
     plt.show()
     
     #cv.imshow('Original', im)

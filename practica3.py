@@ -83,3 +83,47 @@ def otsu(img):
     return th2
     #cv2.imshow('Metodo Otsu',th2)
     #cv2.waitKey(0)
+
+#Funcion que realiza la multiumbralizacion de una imagen
+#Recibe como parametros la imagen y una lista con los umbrales que el usuario introduce
+def multiumbralizacion(im,umbrales):
+    
+    #Verifica si la imagen tiene 3 canales RGB
+    if(len(im.shape)==3):
+        #Si los tiene la convierte a escala de grises con un solo canal
+        im2=cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    
+    #Inicializa limite izquierdo en cero
+    lim_izq = 0
+    #Crea una lista vacía donde se guardan las imagenes
+    objetos = [None]*(len(umbrales)+1)
+    
+    #Umbralizacion por cada objeto
+    for i in range (0,len(umbrales)+1):
+        if(i == len(umbrales)):
+            #Establece limite derecho
+            lim_der = 255
+        else:
+            #Establece limite derecho
+            lim_der = umbrales[i]
+            
+        #Crea una nueva imagen para el objeto
+        objetos[i] = copy.copy(im2)
+        
+        #Recorre los pixeles de la imagen
+        for j in range(0,im2.shape[1]):
+            for k in range(0,im2.shape[0]):
+                if( im2[k,j] > lim_izq and im2[k,j] < lim_der ):
+                    (objetos[i])[k][j] = 0
+                else:
+                    (objetos[i])[k][j] = 255
+    
+    """
+    #Muestra objetos
+    for img in objetos:
+        cv2.imshow('Objeto', img)
+        cv2.waitKey()
+    """
+    
+    #Regresa los objetos
+    return objetos

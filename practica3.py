@@ -109,7 +109,7 @@ def multiumbralizacion(im,umbrales):
             lim_der = umbrales[i]
             
         #Crea una nueva imagen para el objeto
-        objetos[i] = copy.copy(im2)
+        objetos[i] = copy.copy(im)
         
         #Recorre los pixeles de la imagen
         for j in range(0,im2.shape[1]):

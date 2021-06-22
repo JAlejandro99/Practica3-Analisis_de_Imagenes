@@ -3,6 +3,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 from PIL import Image,ImageTk
 from numpy import *
+import imutils
 from operaciones_histograma import *
 from filtros import *
 import cv2 as cv
@@ -427,6 +428,101 @@ def fbinarizar():
         return
     pedirValor("Binarización",2,0,255)
 
+#Lista con valores de umbrales
+    
+valores_umbral = []
+    
+def agregar_valores():
+     
+    if(len(valores_umbral) > 4):
+        messagebox.showerror(message="El número de umbrales seleccionados no debe ser mayor que 5", 
+                             title="Limite de umbrales")
+    else:
+        valores_umbral.append(s1.get())
+    
+    print(valores_umbral)
+    #Muestra lor valores elegidos por el usuario en pantalla
+    cadena = "Umbrales:\n"
+    for i in range(0,len(valores_umbral)):
+                   cadena = cadena + "u" + str(i+1) + ": " + str(valores_umbral[i]) + "\n"
+    lblumbrales = Label(newWindow, text = cadena)
+    lblumbrales.grid(column=1, row=5)
+  
+def quitar_valores():
+    print(valores_umbral)
+    if(len(valores_umbral) > 0):
+        valores_umbral.pop()
+    else:
+        messagebox.showerror(message="No hay umbrales seleccionados", 
+                             title="Lista vacía")
+    #Muestra lor valores elegidos por el usuario en pantalla
+    cadena = "Umbrales:\n"
+    for i in range(0,len(valores_umbral)):
+                   cadena = cadena + "u" + str(i+1) + ": " + str(valores_umbral[i]) + "\n"
+    lblumbrales = Label(newWindow, text = cadena)
+    lblumbrales.grid(column=1, row=5)
+ 
+def Multiumb():
+    print(valores_umbral)
+    obj = multiumbralizacion(im[img_sel], valores_umbral)
+    #Muestra objetos
+    for imag in obj:
+        agregar_img(imag)
+        cv.imshow('Imagen', imag)
+        cv.waitKey()
+
+#Interfaz para ingresar umbrales de binarización para multiumbralizacion
+def mumbral_interfaz():
+    
+    #Si no hay imagenes seleccionadas muestra advertencia
+    if(len(im)==0):
+        messagebox.showwarning(message="Debes seleccionar una imagen", 
+                             title="Imagen no seleccionada")
+        return
+      
+    aux = h_original(im[img_sel])
+    imagen = cv.imread("histograma.png")
+    
+    #Crea nueva ventana
+    global newWindow
+    newWindow = Toplevel(root)
+    newWindow.title("Elegir umbrales")
+    
+    #Label para presentar la imagen
+    lblInputImage = Label(newWindow)
+    lblInputImage.grid(column=0, row=5)
+
+    #Visualizar la imagen en la interfaz
+    im_pantalla = imutils.resize(imagen, width=500)
+    img = ImageTk.PhotoImage(image=Image.fromarray(im_pantalla))
+    
+    #Label para mostrar imagen
+    lblInputImage.configure(image=img)
+    lblInputImage.image = img
+    
+    global s1
+    #Escala para elegir umbral
+    s1 = scaleExample = Scale(newWindow,
+                        orient='horizontal',
+                        resolution=1,
+                        length=390,
+                        from_=0,
+                        to=255)
+    scaleExample.grid(column=0, row=10)
+    
+    #Boton para agregar un valor de umbral
+    btn2 = Button(newWindow, text="Añadir umbral", width=15, command = agregar_valores)
+    btn2.grid(column=0, row=11, padx=5, pady=5)
+    
+    #Boton para eliminar un valor de umbral de la lista
+    btn3 = Button(newWindow, text="Quitar umbral", width=15, command = quitar_valores)
+    btn3.grid(column=1, row=11, padx=5, pady=5)
+    
+    #Boton para mostrar imagenes
+    btn4 = Button(newWindow, text="Ver imágenes", width=15, command = Multiumb)
+    btn4.grid(column=0, row=12, padx=5, pady=5)
+
+    
 def letraspr():
     #cv.imshow('Imagen',cv.cvtColor(cv.imread("p_completa.png"), cv.COLOR_BGR2GRAY))
     img1 = cv.cvtColor(cv.imread("p_completa.png"), cv.COLOR_BGR2GRAY)
@@ -670,7 +766,7 @@ b16.bind("<Leave>",button_hover_leave)
 
 #Multiumbralización
 img17 = leer_imagen("iconos/multiumbralizacion.png")
-b17=Button(root,image=img17,width=80,command=lambda:filtroMinimo())
+b17=Button(root,image=img17,width=80,command=lambda:mumbral_interfaz())
 b17.grid(row=3,column=0)
 b17.bind("<Enter>",button_hover)
 b17.bind("<Leave>",button_hover_leave)
